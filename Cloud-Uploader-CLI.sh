@@ -19,11 +19,19 @@ fi
 
 # Add verification for s3 bucket name
 
-# if [[ "$bucketName" != "$S3_BUCKET" ]]; then
-#     echo "$bucketName"
-#     echo "An S3 bucket has to be passed for this to work"
-#     exit 1
-# fi
+bucketName=$(aws s3 ls | grep "$2")
+if [[ $? -eq 1 ]]; then
+    echo "$bucketName"
+    echo "An S3 bucket has to be passed for this to work"
+    exit 1
+fi
+
+# Check if AWS-cli is installed
+AWS_INSTALLED=$(which aws | wc -l)
+if [[ "$AWS_INSTALLED" -eq 0 ]]; then
+    echo "Please install the aws-cli tool following the documentation in aws"
+    exit 1
+fi
 
 # Add file sync for better use
 
